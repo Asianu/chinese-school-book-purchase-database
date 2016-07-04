@@ -20,7 +20,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import entry_data.Books;
 import entry_data.Entry;
 
-public abstract class ExcelParser{
+public class ExcelParser{
+	/* constant variables */
 	/* constants for column label writing */
 	public static final int NUM_COLS = 4,
 							NAME_COL = 0,
@@ -31,6 +32,11 @@ public abstract class ExcelParser{
 										   "Family ID", 
 										   "Book(s) Bought", 
 										   "Date Bought"};
+	
+	/* constants for toString */
+	private static final String TO_STRING_LABELS =
+			"Name\tID\tBooks\t\t\t\tDates\n" +
+				"------- ------- ------------------------------- -------\n";
 
 	/* variables */
 	public String filename;
@@ -135,6 +141,20 @@ public abstract class ExcelParser{
 		return new Entry(name, ID, bookList, dateList);
 	}
 
+	/**
+	 * @function	getEntry
+	 * @param 		entry (Entry) - entry to retrieve from the database
+	 * @return		the entry in the database
+	 * 				null if entry is not found
+	 * @description	this exists in order to retrieve the books/dates associated
+	 * 				with the passed in entry (that does not have books/dates).
+	 * 				Delegates to getRow() and getEntry(Row).
+	 */
+	public Entry getEntry(Entry entry){
+		if(hasEntry(entry)) return getEntry(getRow(entry));
+		return null;
+	}
+	
 	/**
 	 * @function	getRow
 	 * @param 		entry (Entry) - the entry to be located
@@ -257,8 +277,7 @@ public abstract class ExcelParser{
 	 */
 	public String toString(){
 		//initialize the return string with the labels
-		String ret = "Name\tID\tBooks\t\t\t\tDates\n" + 
-					 "----\t--\t-----\t\t\t\t-----\n";
+		String ret = TO_STRING_LABELS;
 		
 		//initialize rowIterator and skip the first row (labels)
 		Iterator<Row> rowIterator = sheet.rowIterator();

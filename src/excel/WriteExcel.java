@@ -151,7 +151,7 @@ public class WriteExcel extends ExcelParser{
 		
 		return INSERT_ENTRY;
 	}
-	
+
 	/**
 	 * @function	end
 	 * @param		none
@@ -320,44 +320,39 @@ public class WriteExcel extends ExcelParser{
 		WriteExcel test = new WriteExcel();
 
 		Entry LDentry = new Entry("Leung", 1927);
-		//test.writeEntry(LDentry,  test.getSheet().createRow(1));
 		test.insertEntry(LDentry);
 		
 		List<Books> bookList = new ArrayList<Books>();
 		List<String> dateList = new ArrayList<String>();
 		
 		bookList.add(Books.ECT2); bookList.add(Books.L2P1T); bookList.add(Books.TPY4);
-		dateList.add("1/5/2016"); dateList.add("3/13/2016"); dateList.add("11/26/2016");
+		dateList.add("01/05/2016"); dateList.add("03/13/2016"); dateList.add("11/26/2016");
 		
 		Entry JLentry = new Entry("Lim", 2000, bookList, dateList);
-		//test.writeEntry(JLentry, test.getSheet().createRow(2));
 		test.insertEntry(JLentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry CCentry = new Entry("Cheng", 516, bookList, dateList);
-		//test.writeEntry(CCentry, test.getSheet().createRow(5));
 		test.insertEntry(CCentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry JSentry = new Entry("Sy", 3210, bookList, dateList);
-		//test.writeEntry(JSentry,  test.getSheet().createRow(7));
 		test.insertEntry(JSentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry CPentry = new Entry("Pung", 1021, bookList, dateList);
-		//test.writeEntry(CPentry,  test.getSheet().createRow(8));
 		test.insertEntry(CPentry);
 
 		bookList.add(Books.ECW1); dateList.add("02/21/2016");
+		bookList.add(Books.MCBT1); dateList.add("04/07/2016");
 		
 		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
-		//test.updateEntry(UPentry, test.getSheet().getRow(8));
 		test.insertEntry(UPentry);
 		
 		System.out.println(test);
