@@ -136,6 +136,36 @@ public abstract class ExcelParser{
 	}
 
 	/**
+	 * @function	getRow
+	 * @param 		entry (Entry) - the entry to be located
+	 * @return		the Row where the entry can be found. If not found, then
+	 * 				returns null
+	 * @description	Determines if the entry exists, if not then return null,
+	 * 				otherwise iterate through the sheet and return the row
+	 * 				where entry is found.
+	 */
+	public Row getRow(Entry entry){
+		//entry does not exist, return null immediately
+		if(!hasEntry(entry)) return null;
+		
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		
+		//skip the first row (label row)
+		rowIterator.next();
+		
+		//go through the rows and 
+		while(rowIterator.hasNext()){
+			Entry tmpEntry;
+			Row currentRow = rowIterator.next();
+			
+			//compare entries
+			if((tmpEntry = getEntry(currentRow)) != null)
+				if(entry.isEqual(tmpEntry)) return currentRow;
+		}
+		return null;
+	}
+	
+	/**
 	 * @function	hasEntry
 	 * @param 		entry (Entry) - the entry to check for in the database
 	 * @return		true if sheet contains entry
@@ -145,9 +175,6 @@ public abstract class ExcelParser{
 	 * 				columns.
 	 */
 	public boolean hasEntry(Entry entry){
-		//sheet neither has name or ID, return false immediately
-		if(!hasName(entry.getName()) || !hasID(entry.getID())) return false;
-		
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		
 		//skip the first row (label row)
@@ -155,22 +182,13 @@ public abstract class ExcelParser{
 		
 		//go through the rows and compare names & IDs
 		while(rowIterator.hasNext()){
+			Entry tmpEntry;
 			Row currentRow = rowIterator.next();
 			
-			Cell nameCell;
-			Cell IDCell;
-			
-			//if both nameCell and IDCell are non-null, continue
-			if((nameCell = currentRow.getCell(NAME_COL)) != null &&
-			   (IDCell   = currentRow.getCell(FAMI_COL)) != null)
-				
-				//if both nameCell and IDCell have correct cell types, continue
-				if(nameCell.getCellType() == Cell.CELL_TYPE_STRING &&
-				   IDCell.getCellType() == Cell.CELL_TYPE_NUMERIC)
-					
-					//return true only if name && ID match
-					if(entry.isEqual(getEntry(currentRow))) return true;
-		}
+			//compare entries
+			if((tmpEntry = getEntry(currentRow)) != null)
+				if(entry.isEqual(tmpEntry)) return true;
+			}
 		return false;
 	}
 
@@ -210,6 +228,7 @@ public abstract class ExcelParser{
 	 * @description	iterates through ID column and compares to see if the
 	 * 				passed in ID is present in the sheet
 	 */
+	/* probably not necessary
 	private boolean hasID(int ID){
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		
@@ -229,6 +248,7 @@ public abstract class ExcelParser{
 		}
 		return false;
 	}
+	*/
 
 	/**
 	 * @function	toString()

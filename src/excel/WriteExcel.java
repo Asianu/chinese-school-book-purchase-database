@@ -285,11 +285,7 @@ public class WriteExcel extends ExcelParser{
 		
 		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
 		
-		System.out.println(test + "\n");
-		
 		test.updateEntry(UPentry, test.getSheet().getRow(8));
-
-		System.out.println(test);
 		
 		test.end();
 		
