@@ -64,6 +64,18 @@ public class Entry{
 	}
 	
 	/**
+	 * @function	isEqual
+	 * @param 		otherEntry (Entry) - entry to be checked against
+	 * @return		true if name and ID are equal
+	 * 				false otherwise
+	 */
+	public boolean isEqual(Entry otherEntry){
+		if(name.equals(otherEntry.getName()) && ID == otherEntry.getID())
+			return true;
+		return false;
+	}
+	
+	/**
 	 * @function	toString
 	 * @param		none
 	 * @return		String in the format:	name(6)	ID	books	dates

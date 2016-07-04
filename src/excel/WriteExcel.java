@@ -31,6 +31,7 @@ public class WriteExcel extends ExcelParser{
 								EXTENSION  = ".xlsx";
 
 	/* constants for default constructor */
+	/* constant integers are for extracting info from Date */
 	private static final int DOW  = 0,
 							 DD   = 11,
 							 YYYY = 24;
@@ -282,9 +283,13 @@ public class WriteExcel extends ExcelParser{
 
 		bookList.add(Books.ECW1); dateList.add("02/21/2016");
 		
-		Entry UPentry = new Entry("Pung", 1000, bookList, dateList);
+		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
 		
-		test.updateEntry(UPentry, test.getSheet().getRow(0));
+		System.out.println(test + "\n");
+		
+		test.updateEntry(UPentry, test.getSheet().getRow(8));
+
+		System.out.println(test);
 		
 		test.end();
 		

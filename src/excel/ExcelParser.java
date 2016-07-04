@@ -23,14 +23,14 @@ import entry_data.Entry;
 public abstract class ExcelParser{
 	/* constants for column label writing */
 	public static final int NUM_COLS = 4,
-							 NAME_COL = 0,
-							 FAMI_COL = 1,
-							 BOOK_COL = 2,
-							 DATE_COL = 3;
+							NAME_COL = 0,
+							FAMI_COL = 1,
+							BOOK_COL = 2,
+							DATE_COL = 3;
 	public static final String[] LABELS = {"Last Name", 
-											"Family ID", 
-											"Book(s) Bought", 
-											"Date Bought"};
+										   "Family ID", 
+										   "Book(s) Bought", 
+										   "Date Bought"};
 
 	/* variables */
 	public String filename;
@@ -71,19 +71,17 @@ public abstract class ExcelParser{
 		if(row == null) return null;
 		
 		//if the name or family cell has not been initialized, return null
-		try{
-			nameCell = row.getCell(NAME_COL);
-			famiCell = row.getCell(FAMI_COL);
-		}catch(NullPointerException e){return null;}
+		if((nameCell = row.getCell(NAME_COL)) == null ||
+		   (famiCell = row.getCell(FAMI_COL)) == null) return null;
 		
 		//cell type mismatch = not a valid entry
 		if(nameCell.getCellType() != Cell.CELL_TYPE_STRING ||
-				famiCell.getCellType() != Cell.CELL_TYPE_NUMERIC) return null;
+		   famiCell.getCellType() != Cell.CELL_TYPE_NUMERIC) return null;
 		
 		//if the row specified does not have a name or fam ID, return null
 		try{
 			if(nameCell.getStringCellValue().compareTo("") <= 0 ||
-					famiCell.getNumericCellValue() == 0) return null;
+			   famiCell.getNumericCellValue() == 0) return null;
 		}catch(NullPointerException e){return null;}
 		
 		//assign name and ID
@@ -142,11 +140,38 @@ public abstract class ExcelParser{
 	 * @param 		entry (Entry) - the entry to check for in the database
 	 * @return		true if sheet contains entry
 	 * 				false otherwise
-	 * @description	delegates to hasName and hasID to see if the passed in
-	 * 				entry matches any existing ones (books + dates not checked)
+	 * @description	iterates row by row and compares to see if the passed in
+	 * 				entry is present in the sheet by checking name and ID
+	 * 				columns.
 	 */
 	public boolean hasEntry(Entry entry){
-		return hasName(entry.getName()) && hasID(entry.getID());
+		//sheet neither has name or ID, return false immediately
+		if(!hasName(entry.getName()) || !hasID(entry.getID())) return false;
+		
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		
+		//skip the first row (label row)
+		rowIterator.next();
+		
+		//go through the rows and compare names & IDs
+		while(rowIterator.hasNext()){
+			Row currentRow = rowIterator.next();
+			
+			Cell nameCell;
+			Cell IDCell;
+			
+			//if both nameCell and IDCell are non-null, continue
+			if((nameCell = currentRow.getCell(NAME_COL)) != null &&
+			   (IDCell   = currentRow.getCell(FAMI_COL)) != null)
+				
+				//if both nameCell and IDCell have correct cell types, continue
+				if(nameCell.getCellType() == Cell.CELL_TYPE_STRING &&
+				   IDCell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+					
+					//return true only if name && ID match
+					if(entry.isEqual(getEntry(currentRow))) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -168,12 +193,11 @@ public abstract class ExcelParser{
 			Cell nameCell;
 			
 			//if cell is null, current row contains only books
-			if((nameCell = rowIterator.next().getCell(NAME_COL)) == null)
-				continue;
-
-			//ensure nameCell contains a string
-			if(nameCell.getCellType() == Cell.CELL_TYPE_STRING)
-				if(nameCell.getStringCellValue().equals(name)) return true;
+			if((nameCell = rowIterator.next().getCell(NAME_COL)) != null)
+				
+				//ensure nameCell contains a string
+				if(nameCell.getCellType() == Cell.CELL_TYPE_STRING)
+					if(nameCell.getStringCellValue().equals(name)) return true;
 		}
 		return false;
 	}
@@ -197,13 +221,37 @@ public abstract class ExcelParser{
 			Cell IDCell;
 
 			//if cell is null, current row contains only books
-			if((IDCell = rowIterator.next().getCell(FAMI_COL)) == null)
-					continue;
-
-			if(IDCell.getCellType() == Cell.CELL_TYPE_NUMERIC)
-				if(IDCell.getNumericCellValue() == ID) return true;
+			if((IDCell = rowIterator.next().getCell(FAMI_COL)) != null)
+			
+				//ensure IDCell contains an integer
+				if(IDCell.getCellType() == Cell.CELL_TYPE_NUMERIC)
+					if(IDCell.getNumericCellValue() == ID) return true;
 		}
 		return false;
 	}
 
+	/**
+	 * @function	toString()
+	 * @param		none
+	 * @description	prints out all the information in the sheet
+	 */
+	public String toString(){
+		//initialize the return string with the labels
+		String ret = "Name\tID\tBooks\t\t\t\tDates\n" + 
+					 "----\t--\t-----\t\t\t\t-----\n";
+		
+		//initialize rowIterator and skip the first row (labels)
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		rowIterator.next();
+		
+		while(rowIterator.hasNext()){
+			Entry tmpEntry;
+		
+			//check to see if name is not null, if so then create the entry
+			if((tmpEntry = getEntry(rowIterator.next())) != null)
+				ret += tmpEntry.toString() + "\n";
+		}
+		
+		return ret;
+	}
 }
