@@ -153,12 +153,12 @@ public abstract class ExcelParser{
 		//skip the first row (label row)
 		rowIterator.next();
 		
-		//go through the rows and 
+		//go through the rows and...
 		while(rowIterator.hasNext()){
 			Entry tmpEntry;
 			Row currentRow = rowIterator.next();
 			
-			//compare entries
+			//... compare entries
 			if((tmpEntry = getEntry(currentRow)) != null)
 				if(entry.isEqual(tmpEntry)) return currentRow;
 		}

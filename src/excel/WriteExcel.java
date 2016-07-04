@@ -91,10 +91,65 @@ public class WriteExcel extends ExcelParser{
 		}
 		
 		Iterator<Row> rowIterator = sheet.rowIterator();
+		Row tmpRow = rowIterator.next();
 		
+		Entry tmpEntry;
 		
+		//inserting by default is after the current row
+		//takes care of the case where no entries exist (insert AFTER labels)
+		boolean before = false;
 		
-		return 0;
+		//iterate through sheet and see if an entry can be made, if so compare
+		while(rowIterator.hasNext()){
+			tmpRow = rowIterator.next();
+			
+			//ensures tmpEntry is not null
+			if((tmpEntry = getEntry(tmpRow)) != null){
+				
+				//first, compare names, then check IDs
+				//if new entry's name = existing enxtry's name, check IDs
+				if(entry.getName().compareTo(tmpEntry.getName()) == 0){
+					
+					//if new entry's ID < existing entry's name, break
+					//insert will occur before current row
+					//note: it will never be equal
+					if(entry.getID() < tmpEntry.getID()){
+						before = true;
+						break;
+					}
+					
+					//otherwise, insert will occur afterwards
+				}
+
+				//if new entry's name < existing entry's name, break
+				//insert occurs before current row regardless
+				else if(entry.getName().compareTo(tmpEntry.getName()) < 0){
+					before = true;
+					break;
+				}
+				
+				//new entry's name > existing entry's name, continue
+				//insert occurs after (default) if it reaches the end
+				else continue;
+			}
+		}
+		
+		int entryRowNum = tmpRow.getRowNum();
+		
+		//before is true, tmpEntry is ensured to be initialized,
+		//shift at the current row by entry's number of books
+		if(before)
+			sheet.shiftRows(entryRowNum, sheet.getLastRowNum(), 
+					(entry.getBooks().size() == 0 ?
+							1 : entry.getBooks().size()));
+		
+		//insert occurs after the current row
+		else entryRowNum++;
+		
+		//write to the sheet
+		writeEntry(entry, sheet.createRow(entryRowNum));
+		
+		return INSERT_ENTRY;
 	}
 	
 	/**
@@ -237,9 +292,16 @@ public class WriteExcel extends ExcelParser{
 					lastSheetRowNum = sheet.getLastRowNum();
 				
 				//if current entry is NOT last entry, shift entries down
-				if(lastEntryRowNum < sheet.getLastRowNum())
-					sheet.shiftRows(
-							lastEntryRowNum + 1, lastSheetRowNum, numNewBooks);
+				if(lastEntryRowNum < sheet.getLastRowNum()){
+					
+					//do not shift if one new book is added to 0
+					if(numOldBooks <= 0 && numNewBooks <= 1){/* do nothing */}
+					
+					//shift according to whether there are currently any books
+					//new # - 1 if no books in list yet, otherwise by new #
+					else sheet.shiftRows(lastEntryRowNum + 1, lastSheetRowNum,
+							(numOldBooks < 1 ? numNewBooks - 1 : numNewBooks));
+				}
 				
 				//add new books/dates to old books/dates list
 				for(Books book: newBooksList) oldBooksList.add(book);
@@ -258,7 +320,8 @@ public class WriteExcel extends ExcelParser{
 		WriteExcel test = new WriteExcel();
 
 		Entry LDentry = new Entry("Leung", 1927);
-		test.writeEntry(LDentry,  test.getSheet().createRow(1));
+		//test.writeEntry(LDentry,  test.getSheet().createRow(1));
+		test.insertEntry(LDentry);
 		
 		List<Books> bookList = new ArrayList<Books>();
 		List<String> dateList = new ArrayList<String>();
@@ -267,35 +330,35 @@ public class WriteExcel extends ExcelParser{
 		dateList.add("1/5/2016"); dateList.add("3/13/2016"); dateList.add("11/26/2016");
 		
 		Entry JLentry = new Entry("Lim", 2000, bookList, dateList);
-
-		test.writeEntry(JLentry, test.getSheet().createRow(2));
+		//test.writeEntry(JLentry, test.getSheet().createRow(2));
+		test.insertEntry(JLentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry CCentry = new Entry("Cheng", 516, bookList, dateList);
-		
-		test.writeEntry(CCentry, test.getSheet().createRow(5));
+		//test.writeEntry(CCentry, test.getSheet().createRow(5));
+		test.insertEntry(CCentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry JSentry = new Entry("Sy", 3210, bookList, dateList);
-		
-		test.writeEntry(JSentry,  test.getSheet().createRow(7));
+		//test.writeEntry(JSentry,  test.getSheet().createRow(7));
+		test.insertEntry(JSentry);
 		
 		bookList.remove(0);
 		dateList.remove(0);
 		
 		Entry CPentry = new Entry("Pung", 1021, bookList, dateList);
-		
-		test.writeEntry(CPentry,  test.getSheet().createRow(8));
+		//test.writeEntry(CPentry,  test.getSheet().createRow(8));
+		test.insertEntry(CPentry);
 
 		bookList.add(Books.ECW1); dateList.add("02/21/2016");
 		
 		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
-		
-		test.updateEntry(UPentry, test.getSheet().getRow(8));
+		//test.updateEntry(UPentry, test.getSheet().getRow(8));
+		test.insertEntry(UPentry);
 		
 		System.out.println(test);
 		
