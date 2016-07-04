@@ -26,6 +26,10 @@ import java.util.List;
 
 public class WriteExcel extends ExcelParser{
 	/* constant variables */
+	/* constants for insertEntry's return values */
+	public static final int INSERT_ENTRY = 0,
+							UPDATE_ENTRY = 1;
+	
 	/* constants for constructor */
 	private static final String SHEET_NAME = "Sheet1",
 								EXTENSION  = ".xlsx";
@@ -80,7 +84,15 @@ public class WriteExcel extends ExcelParser{
 	 * 				if the entry already exists, update instead
 	 */
 	public int insertEntry(Entry entry){
+		//database already contains the entry, update it
+		if(hasEntry(entry)){
+			updateEntry(entry, getRow(entry));
+			return UPDATE_ENTRY;
+		}
+		
 		Iterator<Row> rowIterator = sheet.rowIterator();
+		
+		
 		
 		return 0;
 	}
@@ -278,14 +290,14 @@ public class WriteExcel extends ExcelParser{
 		Entry CPentry = new Entry("Pung", 1021, bookList, dateList);
 		
 		test.writeEntry(CPentry,  test.getSheet().createRow(8));
-		
-		System.out.println(test.getEntry(test.getSheet().getRow(5)));
 
 		bookList.add(Books.ECW1); dateList.add("02/21/2016");
 		
 		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
 		
 		test.updateEntry(UPentry, test.getSheet().getRow(8));
+		
+		System.out.println(test);
 		
 		test.end();
 		
