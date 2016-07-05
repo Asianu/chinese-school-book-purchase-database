@@ -7,7 +7,6 @@
 package excel;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +21,8 @@ import entry_data.Entry;
 
 public class ExcelParser{
 	/* constant variables */
+	public static final String SHEET_NAME = "Sheet1";
+	
 	/* constants for column label writing */
 	public static final int NUM_COLS = 4,
 							NAME_COL = 0,
@@ -41,7 +42,6 @@ public class ExcelParser{
 	/* variables */
 	public String filename;
 	public File file;
-	public FileOutputStream fos;
 	public XSSFWorkbook workbook;
 	public XSSFSheet sheet;
 
@@ -50,7 +50,6 @@ public class ExcelParser{
 	public String			getFileName()		 {return filename;}
 	public XSSFSheet 		getSheet()			 {return sheet;	  }
 	public XSSFWorkbook 	getWorkbook()		 {return workbook;}
-	public FileOutputStream getFileOutputStream(){return fos;	  }
 	
 
 
