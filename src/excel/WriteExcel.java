@@ -14,7 +14,6 @@ import entry_data.Entry;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Cell;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,14 +24,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public class WriteExcel extends ExcelParser{
+	/* local variable */
+	private FileOutputStream fos;
+	
 	/* constant variables */
 	/* constants for insertEntry's return values */
 	public static final int INSERT_ENTRY = 0,
 							UPDATE_ENTRY = 1;
 	
 	/* constants for constructor */
-	private static final String SHEET_NAME = "Sheet1",
-								EXTENSION  = ".xlsx";
+	private static final String EXTENSION  = ".xlsx";
 
 	/* constants for default constructor */
 	/* constant integers are for extracting info from Date */
@@ -320,7 +321,6 @@ public class WriteExcel extends ExcelParser{
 		}
 	}
 	
-
 	/* Test Code */
 	public static void main(String args[]){
 		WriteExcel test = new WriteExcel();
@@ -361,13 +361,12 @@ public class WriteExcel extends ExcelParser{
 		Entry UPentry = new Entry("Pung", 1021, bookList, dateList);
 		test.insertEntry(UPentry);
 		
-		System.out.println(test);
-		
 		test.end();
 		
-
+		/*
 		try{
 			Desktop.getDesktop().open(test.getFile());
 		}catch(IOException e){}
+		*/
 	}
 }
