@@ -50,14 +50,20 @@ public class WriteExcel extends ExcelParser{
 	 * 				with the correct template.
 	 */
 	public WriteExcel(String filename){
-		this.filename = filename;
-		try{
-			//create a new excel file using passed in filename
-			file	 = new File(filename + EXTENSION);
-			fos 	 = new FileOutputStream(file);
-			workbook = new XSSFWorkbook();
-			sheet 	 = workbook.createSheet(SHEET_NAME);
-		}catch(FileNotFoundException e){e.printStackTrace();}
+		int count = 0;
+		while(true){
+			
+			//solves case for duplicate files (appends with "(#)")
+			this.filename = filename + (count == 0 ? "" : " (" + count + ")");
+			try{
+				//create a new excel file using passed in filename
+				file	 = new File(this.filename + EXTENSION);
+				fos 	 = new FileOutputStream(file);
+				workbook = new XSSFWorkbook();
+				sheet 	 = workbook.createSheet(SHEET_NAME);
+				break;
+			}catch(FileNotFoundException e){count++;}
+		}
 		
 		//Writes the labels of the columns
 		writeColumnLabels();
