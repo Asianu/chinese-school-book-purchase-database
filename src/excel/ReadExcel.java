@@ -9,7 +9,6 @@ package excel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -100,7 +99,7 @@ public class ReadExcel extends ExcelParser{
 		System.out.println(read.getEntry(read.getSheet().getRow(1)));
 
 		System.out.println(read.isValidFile());
-
+		
 /*		if(read.isValidFile())
 			try{
 				Desktop.getDesktop().open(read.getFile());
