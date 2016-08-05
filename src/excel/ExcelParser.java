@@ -24,15 +24,15 @@ public class ExcelParser{
 	public static final String SHEET_NAME = "Sheet1";
 	
 	/* constants for column label writing */
-	public static final int NUM_COLS = 4,
-							NAME_COL = 0,
-							FAMI_COL = 1,
-							BOOK_COL = 2,
-							DATE_COL = 3;
-	public static final String[] LABELS = {"Last Name", 
-										   "Family ID", 
-										   "Book(s) Bought", 
-										   "Date Bought"};
+	protected static final int NUM_COLS = 4,
+							   NAME_COL = 0,
+							   FAMI_COL = 1,
+							   BOOK_COL = 2,
+							   DATE_COL = 3;
+	protected static final String[] LABELS = {"Last Name", 
+										      "Family ID", 
+										      "Book(s) Bought", 
+										   	  "Date Bought"};
 	
 	/* constants for toString */
 	private static final String TO_STRING_LABELS =
@@ -82,22 +82,22 @@ public class ExcelParser{
 		//cell type mismatch = not a valid entry
 		if(nameCell.getCellType() != Cell.CELL_TYPE_STRING ||
 		   famiCell.getCellType() != Cell.CELL_TYPE_NUMERIC) return null;
-		
+
 		//if the row specified does not have a name or fam ID, return null
-		try{
-			if(nameCell.getStringCellValue().compareTo("") <= 0 ||
-			   famiCell.getNumericCellValue() == 0) return null;
-		}catch(NullPointerException e){return null;}
+		if(nameCell.getStringCellValue().compareTo("") <= 0 ||
+		   famiCell.getNumericCellValue() == 0) return null;
 		
 		//assign name and ID
 		name = row.getCell(NAME_COL).getStringCellValue();
 		ID   = (int)row.getCell(FAMI_COL).getNumericCellValue();
 		
 		//get the cells containing the book and date at the specified row
-		try{
-			bookCell = row.getCell(BOOK_COL);
-			dateCell = row.getCell(DATE_COL);
-		}catch(NullPointerException e){return null;}
+		if((bookCell = row.getCell(BOOK_COL)) == null ||
+		   (dateCell = row.getCell(DATE_COL)) == null)
+			return new Entry(name, ID, bookList, dateList);
+		else if(bookCell.getCellType() != Cell.CELL_TYPE_STRING ||
+				dateCell.getCellType() != Cell.CELL_TYPE_STRING)
+			return null;
 		
 		//check to see if the cell is non-empty
 		if(bookCell.getStringCellValue().compareTo("") > 0){
@@ -119,12 +119,19 @@ public class ExcelParser{
 			Row currentRow = rowIterator.next();
 			if(currentRow.getCell(NAME_COL) == null){
 				
+				//if ID cell is not null, something is wrong
+				if(currentRow.getCell(FAMI_COL) != null) return null;
+				
 				//the name Cell is null, check book/date
 				try{
 					bookCell = currentRow.getCell(BOOK_COL);
 					dateCell = currentRow.getCell(DATE_COL);
 				}catch(NullPointerException e){return null;}
-
+				
+				if(bookCell.getCellType() != Cell.CELL_TYPE_STRING ||
+				   dateCell.getCellType() != Cell.CELL_TYPE_STRING)
+					return null;
+					
 				//add values in book/dateCell(s) to bookList
 				if(bookCell.getStringCellValue().compareTo("") > 0){
 					Books book = Books.getBook(bookCell.getStringCellValue());
