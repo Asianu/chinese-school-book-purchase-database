@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -322,7 +321,7 @@ public class WriteExcel extends ExcelParser{
 	}
 	
 	/* Test Code */
-	public static void main(String args[]){
+/*	public static void main(String args[]){
 		WriteExcel test = new WriteExcel();
 
 		Entry LDentry = new Entry("Leung", 1927);
@@ -362,11 +361,12 @@ public class WriteExcel extends ExcelParser{
 		test.insertEntry(UPentry);
 		
 		test.end();
+
 		
-		/*
 		try{
 			Desktop.getDesktop().open(test.getFile());
 		}catch(IOException e){}
-		*/
+		
 	}
+*/
 }

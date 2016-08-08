@@ -1,5 +1,8 @@
 package gui;
 
+import java.io.File;
+
+import excel.ReadExcel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,9 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Start extends Application{
+	File file;
 	
 	/**
 	 * @function	start
@@ -58,12 +64,21 @@ public class Start extends Application{
 		
 		//creates a WriteExcel for user to use to input data
 		newDataButton.setOnAction(e->{
-			
 		});
 		
 		//reads a file, validates it, and user may display its contents
 		oldDataButton.setOnAction(e->{
 			
+			//configures file to have necessary functions
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialDirectory(new File(
+					System.getProperty("user.home")));
+			fileChooser.getExtensionFilters().addAll(
+					new FileChooser.ExtensionFilter("XLSX", "*.xlsx"));
+			
+			file = fileChooser.showOpenDialog(stage);
+			ReadExcel readExcel = new ReadExcel(file);
+			System.out.println(readExcel.isValidFile());
 		});
 		
 		stage.show();

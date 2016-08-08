@@ -20,13 +20,12 @@ public class ReadExcel extends ExcelParser{
 	private FileInputStream fis;
 	private boolean isValid = true;
 
-	public ReadExcel(String filename){
-		this.filename = filename;
+	public ReadExcel(File file){
 		try{
-			file 	 = new File(filename);
-			fis 	 = new FileInputStream(file);
-			workbook = new XSSFWorkbook(fis);
-			sheet 	 = workbook.getSheet(SHEET_NAME);
+			this.file = file;
+			fis 	  = new FileInputStream(file);
+			workbook  = new XSSFWorkbook(fis);
+			sheet 	  = workbook.getSheet(SHEET_NAME);
 		}catch(FileNotFoundException e){
 			e.printStackTrace();
 			isValid = false;
@@ -82,15 +81,14 @@ public class ReadExcel extends ExcelParser{
 				//any row with a name that does not beget an entry invalidates
 				//the entire file (or it has been corrupted)
 				if(getEntry(currentRow) == null) return false;
-				System.out.println(getEntry(currentRow));
 			}
-			
 			//tests passed
 			return true;
 		}
 	}
 	
-	public static void main(String[] args){
+	/* Test code */
+/*	public static void main(String[] args){
 		//WriteExcel write = new WriteExcel();
 
 		//write.main(args);
@@ -100,10 +98,10 @@ public class ReadExcel extends ExcelParser{
 
 		System.out.println(read.isValidFile());
 		
-/*		if(read.isValidFile())
+		if(read.isValidFile())
 			try{
 				Desktop.getDesktop().open(read.getFile());
-			}catch(IOException e){}*/
+			}catch(IOException e){}
 	}
-
+*/
 }
