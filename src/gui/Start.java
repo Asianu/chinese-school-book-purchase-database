@@ -3,6 +3,7 @@ package gui;
 import java.io.File;
 
 import excel.ReadExcel;
+import excel.WriteExcel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Start extends Application{
-	File file;
+	File workingFile, workingDir;
 	
 	/**
 	 * @function	start
@@ -64,21 +65,33 @@ public class Start extends Application{
 		
 		//creates a WriteExcel for user to use to input data
 		newDataButton.setOnAction(e->{
+			
+			//configures dirChooser
+			DirectoryChooser dirChooser = new DirectoryChooser();
+			dirChooser.setInitialDirectory(new File(
+					System.getProperty("user.home")));
+			
+			workingDir = dirChooser.showDialog(stage);
+			if(workingDir != null){
+				WriteExcel wE = new WriteExcel(workingDir.getAbsolutePath());
+				wE.end(); //TODO: remove this
+			}
 		});
 		
 		//reads a file, validates it, and user may display its contents
 		oldDataButton.setOnAction(e->{
 			
-			//configures file to have necessary functions
+			//configures fileChooser
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setInitialDirectory(new File(
 					System.getProperty("user.home")));
 			fileChooser.getExtensionFilters().addAll(
 					new FileChooser.ExtensionFilter("XLSX", "*.xlsx"));
 			
-			file = fileChooser.showOpenDialog(stage);
-			ReadExcel readExcel = new ReadExcel(file);
-			System.out.println(readExcel.isValidFile());
+			workingFile = fileChooser.showOpenDialog(stage);
+			if(workingFile != null){
+				ReadExcel rE = new ReadExcel(workingFile);
+			}
 		});
 		
 		stage.show();

@@ -45,31 +45,41 @@ public class WriteExcel extends ExcelParser{
 
 	/**
 	 * @function	WriteExcel
-	 * @param 		filename (String) - name of the file to be written
+	 * @param 		path (String) - path to the file to be written
 	 * @description	Constructor for WriteExcel, which creates a new excel file
 	 * 				with the correct template.
 	 */
-	public WriteExcel(String filename){
+	public WriteExcel(String path){
+		setFilename();
+		
 		int count = 0;
 		while(true){
 			
 			//solves case for duplicate files (appends with "(#)")
-			this.filename = filename + (count == 0 ? "" : " (" + count + ")");
+			if(count != 0) filename = (count == 1 ? filename + " (1)" : 
+				filename.substring(0, filename.length() - 3) + 
+				"(" + count + ")");
+			
 			try{
 				//create a new excel file using passed in filename
-				file	 = new File(this.filename + EXTENSION);
+				if((file = new File(
+						path + "\\" + filename + EXTENSION)).exists()){
+					throw new FileNotFoundException();
+				}
 				fos 	 = new FileOutputStream(file);
 				workbook = new XSSFWorkbook();
 				sheet 	 = workbook.createSheet(SHEET_NAME);
 				break;
 			}catch(FileNotFoundException e){count++;}
 		}
-		
+
 		//Writes the labels of the columns
 		writeColumnLabels();
 	}
 
 	/**
+	 * @deprecated	default constructor is no longer needed as it will never
+	 * 				function correctly
 	 * @function	WriteExcel (default constructor)
 	 * @param		none
 	 * @description	Default constructor for WriteExcel, creates a new excel
@@ -79,6 +89,16 @@ public class WriteExcel extends ExcelParser{
 		//create a new excel file using the date as the filename
 		this(new Date().toString().substring(DOW, DD) + 
 			 new Date().toString().substring(YYYY) 	  + DEF_FILE_NAME);
+	}
+	
+	/**
+	 * @function	setFilename
+	 * @param		none
+	 * @description	creates and sets the filename
+	 */
+	private void setFilename(){
+		filename = new Date().toString().substring(DOW, DD) +
+				   new Date().toString().substring(YYYY)    + DEF_FILE_NAME;
 	}
 
 	/**
