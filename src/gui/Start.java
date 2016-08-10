@@ -2,6 +2,8 @@ package gui;
 
 import java.io.File;
 
+import entry_data.Entry;
+import excel.ExcelParser;
 import excel.ReadExcel;
 import excel.WriteExcel;
 import javafx.application.Application;
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 
 public class Start extends Application{
 	File workingFile, workingDir;
+	ExcelParser parser;
 	
 	/**
 	 * @function	start
@@ -73,24 +76,28 @@ public class Start extends Application{
 			
 			workingDir = dirChooser.showDialog(stage);
 			if(workingDir != null){
-				WriteExcel wE = new WriteExcel(workingDir.getAbsolutePath());
-				wE.end(); //TODO: remove this
+				parser = new WriteExcel(workingDir.getAbsolutePath());
+				((WriteExcel)parser).end(); //TODO: remove this
 			}
 		});
 		
 		//reads a file, validates it, and user may display its contents
 		oldDataButton.setOnAction(e->{
-			
+
 			//configures fileChooser
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setInitialDirectory(new File(
 					System.getProperty("user.home")));
 			fileChooser.getExtensionFilters().addAll(
 					new FileChooser.ExtensionFilter("XLSX", "*.xlsx"));
-			
+
 			workingFile = fileChooser.showOpenDialog(stage);
 			if(workingFile != null){
-				ReadExcel rE = new ReadExcel(workingFile);
+				if(((ReadExcel)(parser = 
+						new ReadExcel(workingFile))).isValidFile()){
+					parser = ((ReadExcel)parser).wE;
+					((WriteExcel)parser).end();
+				}
 			}
 		});
 		

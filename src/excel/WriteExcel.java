@@ -6,6 +6,7 @@
 
 package excel;
 
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import entry_data.Books;
@@ -77,6 +78,19 @@ public class WriteExcel extends ExcelParser{
 		writeColumnLabels();
 	}
 
+	public WriteExcel(String filename, File file, 
+			XSSFWorkbook workbook, XSSFSheet sheet){
+		try{
+			this.filename = filename;
+			this.file 	  = file;
+			this.workbook = workbook;
+			this.sheet	  = sheet;
+			fos = new FileOutputStream(file);
+		}catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @deprecated	default constructor is no longer needed as it will never
 	 * 				function correctly

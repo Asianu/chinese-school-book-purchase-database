@@ -19,6 +19,9 @@ public class ReadExcel extends ExcelParser{
 	/* local variable */
 	private FileInputStream fis;
 	private boolean isValid = true;
+	
+	/* public variable */
+	public WriteExcel wE;
 
 	public ReadExcel(File file){
 		try{
@@ -26,6 +29,9 @@ public class ReadExcel extends ExcelParser{
 			fis 	  = new FileInputStream(file);
 			workbook  = new XSSFWorkbook(fis);
 			sheet 	  = workbook.getSheet(SHEET_NAME);
+			wE = new WriteExcel(file.getName(), file, workbook, sheet);
+			
+			fis.close();
 		}catch(FileNotFoundException e){
 			e.printStackTrace();
 			isValid = false;
@@ -33,6 +39,7 @@ public class ReadExcel extends ExcelParser{
 			e.printStackTrace();
 			isValid = false;
 		}
+		
 	}
 	
 	/**

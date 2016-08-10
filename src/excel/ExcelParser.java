@@ -225,8 +225,8 @@ public class ExcelParser{
 	 * 				false otherwise
 	 * @description	iterates through name column and compares to see if the
 	 * 				passed in name is present in the sheet
-	 */
-	public boolean hasName(String name){
+	 *//*
+	private boolean hasName(String name){
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		
 		//skip the first row (label row)
@@ -244,7 +244,7 @@ public class ExcelParser{
 					if(nameCell.getStringCellValue().equals(name)) return true;
 		}
 		return false;
-	}
+	}*/
 	
 	/**
 	 * @function	hasID
