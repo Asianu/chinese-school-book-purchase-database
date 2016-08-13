@@ -78,6 +78,14 @@ public class WriteExcel extends ExcelParser{
 		writeColumnLabels();
 	}
 
+	/**
+	 * @function	WriteExcel
+	 * @param 		filename (String) - name of the file
+	 * @param 		file (File) - file to be written
+	 * @param 		workbook (XSSFWorkbook) - workbook contained in file
+	 * @param 		sheet (XSSFSheet) - sheet to be written
+	 * @description	Constructor called by ReadExcel.
+	 */
 	public WriteExcel(String filename, File file, 
 			XSSFWorkbook workbook, XSSFSheet sheet){
 		try{

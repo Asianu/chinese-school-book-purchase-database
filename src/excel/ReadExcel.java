@@ -17,21 +17,22 @@ import java.util.Iterator;
 
 public class ReadExcel extends ExcelParser{
 	/* local variable */
-	private FileInputStream fis;
 	private boolean isValid = true;
 	
 	/* public variable */
 	public WriteExcel wE;
 
+	/**
+	 * @function	ReadExcel
+	 * @param 		file (File) - file to be read/analyzed
+	 * @description	Constructor for ReadExcel
+	 */
 	public ReadExcel(File file){
 		try{
 			this.file = file;
-			fis 	  = new FileInputStream(file);
-			workbook  = new XSSFWorkbook(fis);
+			workbook  = new XSSFWorkbook(new FileInputStream(file));
 			sheet 	  = workbook.getSheet(SHEET_NAME);
 			wE = new WriteExcel(file.getName(), file, workbook, sheet);
-			
-			fis.close();
 		}catch(FileNotFoundException e){
 			e.printStackTrace();
 			isValid = false;
