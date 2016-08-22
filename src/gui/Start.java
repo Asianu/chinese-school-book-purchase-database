@@ -1,3 +1,9 @@
+/**
+ * @author 		LeDaniel Leung
+ * @filename	Start.java
+ * @description	The application that will run
+ */
+
 package gui;
 
 import java.io.File;

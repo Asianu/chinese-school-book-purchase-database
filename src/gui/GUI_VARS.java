@@ -1,3 +1,10 @@
+/**
+ * @author		LeDaniel Leung
+ * @filename	GUI_VARS.java
+ * @description	Interface used to hold all variable constants used
+ * 				in Start.java
+ */
+
 package gui;
 
 public interface GUI_VARS{

@@ -1,3 +1,9 @@
+/**
+ * @author		LeDaniel Leung
+ * @filename	Alerts.java
+ * @description	Class that holds the Alerts used by Start.java
+ */
+
 package gui;
 
 import javafx.scene.control.Alert;
