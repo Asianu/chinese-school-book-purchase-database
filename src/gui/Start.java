@@ -14,7 +14,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -32,6 +31,8 @@ public class Start extends Application implements GUI_VARS{
 	/* variables */
 	private File workingFile, workingDir;
 	private ExcelParser parser;
+	
+	private Alerts alert;
 	
 	/**
 	 * @function	start
@@ -106,7 +107,7 @@ public class Start extends Application implements GUI_VARS{
 						new ReadExcel(workingFile))).isValidFile()){
 					parser = ((ReadExcel)parser).wE;
 				}
-				else alert_error_invalidFile();
+				else alert.alert_error_invalidFile();
 			}
 		});
 		
@@ -231,14 +232,14 @@ public class Start extends Application implements GUI_VARS{
 				}
 				
 				//if ever error is set, show proper alert and do nothing
-				if(error) alert_error_invalidDateFormat();
+				if(error) alert.alert_error_invalidDateFormat();
 				else{
 					bookList = new ArrayList<Books>();
 					
 					//if name is blank, show appropriate error message
 					name = nameField.getText();
 					if(name.compareTo("") <= 0){
-						alert_error_invalidNameFormat();
+						alert.alert_error_invalidNameFormat();
 						break;
 					}
 					
@@ -246,7 +247,7 @@ public class Start extends Application implements GUI_VARS{
 					try{
 						ID = Integer.parseInt(IDField.getText());
 					}catch (NumberFormatException ex){
-						alert_error_invalidIDFormat();
+						alert.alert_error_invalidIDFormat();
 						break;
 					}
 					
@@ -257,6 +258,8 @@ public class Start extends Application implements GUI_VARS{
 					//inserts the new entry with proper parameters
 					((WriteExcel)parser).insertEntry(
 							new Entry(name, ID, bookList, dateList));
+					
+					//TODO: connect to dialog asking if another entry is to be entered
 				}
 			}
 		});
@@ -333,57 +336,6 @@ public class Start extends Application implements GUI_VARS{
 		stage.show();
 	}
 	
-	/**
-	 * @function	alert_error_invalidFile
-	 * @param		none
-	 * @description	shows when an invalid file is read during fileChoosing
-	 */
-	private void alert_error_invalidFile(){
-		Alert invalidFileAlert = new Alert(Alert.AlertType.ERROR);
-		invalidFileAlert.setTitle(STAGE_TITLE);
-		invalidFileAlert.setHeaderText(INV_FILE_HEADER);
-		invalidFileAlert.setContentText(INV_FILE_CONTENT);
-		invalidFileAlert.show();
-	}
-	
-	/**
-	 * @function	alert_error_invalidDateFormat
-	 * @param		none
-	 * @description	shows when a date is not formatted correctly
-	 */
-	private void alert_error_invalidDateFormat(){
-		Alert invalidDateFormatAlert = new Alert(Alert.AlertType.ERROR);
-		invalidDateFormatAlert.setTitle(STAGE_TITLE);
-		invalidDateFormatAlert.setHeaderText(INV_DATE_HEADER);
-		invalidDateFormatAlert.setContentText(INV_DATE_CONTENT);
-		invalidDateFormatAlert.show();
-	}
-	
-	/**
-	 * @function	alert_error_invalidIDFormat
-	 * @param		none
-	 * @description	shows when a ID is not formatted correctly
-	 */
-	private void alert_error_invalidIDFormat(){
-		Alert invalidIDFormatAlert = new Alert(Alert.AlertType.ERROR);
-		invalidIDFormatAlert.setTitle(STAGE_TITLE);
-		invalidIDFormatAlert.setHeaderText(INV_ID_HEADER);
-		invalidIDFormatAlert.setContentText(INV_ID_CONTENT);
-		invalidIDFormatAlert.show();
-	}
-	
-	/**
-	 * @function	alert_error_invalidNameFormat
-	 * @param		none
-	 * @description	shows when nameField is empty
-	 */
-	private void alert_error_invalidNameFormat(){
-		Alert invalidNameFormatAlert = new Alert(Alert.AlertType.ERROR);
-		invalidNameFormatAlert.setTitle(STAGE_TITLE);
-		invalidNameFormatAlert.setHeaderText(INV_NAME_HEADER);
-		invalidNameFormatAlert.setContentText(INV_NAME_CONTENT);
-		invalidNameFormatAlert.show();
-	}
 	
 	/**
 	 * @function	configureGrid
@@ -404,14 +356,14 @@ public class Start extends Application implements GUI_VARS{
 	 * @param 		grid (GridPane) - the GridPane from which rows are counted
 	 * @return		numRows (int) - the number of rows that the GridPane contains
 	 */
-	private int getRowCount(GridPane grid) {
+	private int getRowCount(GridPane grid){
         int numRows = grid.getRowConstraints().size();
-        for (int i = 0; i < grid.getChildren().size(); i++) {
+        for(int i = 0; i < grid.getChildren().size(); i++){
             Node child = grid.getChildren().get(i);
-            if (child.isManaged()) {
+            if (child.isManaged()){
                 Integer rowIndex = GridPane.getRowIndex(child);
                 if(rowIndex != null){
-                    numRows = Math.max(numRows,rowIndex+1);
+                    numRows = Math.max(numRows, rowIndex + 1);
                 }
             }
         }
