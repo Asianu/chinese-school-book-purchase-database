@@ -6,6 +6,8 @@
 
 package entry_data;
 
+import java.util.ArrayList;
+
 public enum Books{
 	TBPM1("Vol. 1 Traditional & Bo-Po-Mo"),
 	TPY1 ("Vol. 1 Traditional & Pin-Yin"),
@@ -56,5 +58,12 @@ public enum Books{
 			if(book.title.equals(title))
 				return book;
 		return null;
+	}
+	
+	public static ArrayList<Books> getAllBooks(){
+		ArrayList<Books> ret = new ArrayList<Books>();
+		for(Books book: Books.values())
+			ret.add(book);
+		return ret;
 	}
 }

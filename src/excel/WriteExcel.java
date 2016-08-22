@@ -39,8 +39,12 @@ public class WriteExcel extends ExcelParser{
 	/* constant integers are for extracting info from Date */
 	private static final int DOW  = 0,
 							 DD   = 11,
-							 YYYY = 24;
+							 YYYY = 24,
+							 NUM = 39;
 	private static final String DEF_FILE_NAME = " Book Purchase Database";
+	
+	/* used if a book was not entered into a choiceBox */
+	private static final String DEF_BOOK_NAME = "BOOK NOT SPECIFIED";
 
 
 
@@ -58,8 +62,7 @@ public class WriteExcel extends ExcelParser{
 			
 			//solves case for duplicate files (appends with "(#)")
 			if(count != 0) filename = (count == 1 ? filename + " (1)" : 
-				filename.substring(0, filename.length() - 3) + 
-				"(" + count + ")");
+				filename.substring(0, NUM) + "(" + count + ")");
 			
 			try{
 				//create a new excel file using passed in filename
@@ -258,14 +261,18 @@ public class WriteExcel extends ExcelParser{
 	 * @param		startCell (Cell) - initial cell to start writing at
 	 * @description	Writes the list of books and dates to the sheet
 	 */
-	private void writeBooks(List<Books> books, List<String> dates, Cell startCell){
+	private void writeBooks(List<Books> books, List<String> dates, 
+			Cell startCell){
 		//goes through the list of books
 		for(int i = 0; i < books.size(); i++){
 			Cell dateCell;
 			
 			//if first book, write to the startCell
 			if(i == 0){
-				startCell.setCellValue(books.get(i).toString());
+				Books book = books.get(i);
+				startCell.setCellValue(
+						book == null ? DEF_BOOK_NAME : 
+							books.get(i).toString());
 				
 				//create the corresponding dateCell
 				dateCell = startCell.getRow().createCell
@@ -278,7 +285,10 @@ public class WriteExcel extends ExcelParser{
 				Row row   = sheet.createRow(startCell.getRowIndex() + i);
 				Cell cell = row.createCell(startCell.getColumnIndex(), 
 						Cell.CELL_TYPE_STRING);
-				cell.setCellValue(books.get(i).toString());
+				
+				Books book = books.get(i);
+				cell.setCellValue(
+						book == null ? DEF_BOOK_NAME : books.get(i).toString());
 				
 				//create the corresponding dateCell
 				dateCell = row.createCell(DATE_COL, Cell.CELL_TYPE_STRING);
