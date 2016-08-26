@@ -53,6 +53,8 @@ public class Start extends Application implements GUI_VARS{
 			if(parser != null) ((WriteExcel)parser).end();
 		});
 		
+		alert = new Alerts();
+		
 		scene_welcome(stage);
 	}
 	
@@ -265,6 +267,8 @@ public class Start extends Application implements GUI_VARS{
 					((WriteExcel)parser).insertEntry(
 							new Entry(name, ID, bookList, dateList));
 					
+					System.out.println(alert.alert_confirmation_additionalEntry());
+					scene_insertEntry(stage);
 					//TODO: connect to dialog asking if another entry is to be entered
 				}
 			}

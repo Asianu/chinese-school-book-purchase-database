@@ -6,7 +6,11 @@
 
 package gui;
 
+import java.util.Optional;
+
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 
 public class Alerts implements GUI_VARS{
 
@@ -61,4 +65,30 @@ public class Alerts implements GUI_VARS{
 		invalidNameFormatAlert.setContentText(INV_NAME_CONTENT);
 		invalidNameFormatAlert.show();
 	}
+
+	/**
+	 * @function	alert_confirmation_additionalEntry
+	 * @param		none
+	 * @return 
+	 * @description	opens up a confirmation dialog to determine if the user
+	 * 				would like to input a new entry
+	 */
+	public boolean alert_confirmation_additionalEntry(){
+		Alert additionalEntryAlert = new Alert(Alert.AlertType.CONFIRMATION);
+		additionalEntryAlert.setTitle(STAGE_TITLE);
+		additionalEntryAlert.setHeaderText(CON_ADD_ENTRY_HEADER);
+		additionalEntryAlert.setContentText(CON_ADD_ENTRY_CONTENT);
+		
+		//buttons with custom actions
+		ButtonType yesButton = new ButtonType(YES, ButtonData.YES),
+				noButton = new ButtonType(NO, ButtonData.NO);
+
+		additionalEntryAlert.getButtonTypes().setAll(yesButton, noButton);
+		
+		Optional<ButtonType> result = additionalEntryAlert.showAndWait();
+		
+		if(result.get() == yesButton) return true;
+		else return false;
+	}
+
 }
