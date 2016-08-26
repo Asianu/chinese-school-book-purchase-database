@@ -114,6 +114,7 @@ public class Start extends Application implements GUI_VARS{
 				if(((ReadExcel)(parser = 
 						new ReadExcel(workingFile))).isValidFile()){
 					parser = ((ReadExcel)parser).wE;
+					//TODO: go to view stage
 				}
 				else alert.alert_error_invalidFile();
 			}
@@ -210,7 +211,7 @@ public class Start extends Application implements GUI_VARS{
 			int ID;
 			ArrayList<Books> bookList;
 			ArrayList<String> dateList = new ArrayList<String>();
-			
+
 			//first, check to see if all dates were correctly formatted
 			for(TextField tmpDateField: chooseDateList){
 				String date = tmpDateField.getText();
@@ -226,52 +227,57 @@ public class Start extends Application implements GUI_VARS{
 					}catch(NumberFormatException ex){
 						error = true;
 					}
-					
+
 					if(!error){
-						
+
 						//adding restrictions to day/month/year values
 						if(day <= 0 || day > 31 || 
 								month <= 0 || month > 12 || 
 								year < 2000 || year > 2100) error = true;
-						
+
 						//adds the date if it passes all checks
 						else dateList.add(date);
 					}
 				}
+			}
+
 				
-				//if ever error is set, show proper alert and do nothing
-				if(error) alert.alert_error_invalidDateFormat();
-				else{
-					bookList = new ArrayList<Books>();
-					
-					//if name is blank, show appropriate error message
-					name = nameField.getText();
-					if(name.compareTo("") <= 0){
-						alert.alert_error_invalidNameFormat();
-						break;
-					}
-					
-					//ID must be a number
-					try{
-						ID = Integer.parseInt(IDField.getText());
-					}catch (NumberFormatException ex){
-						alert.alert_error_invalidIDFormat();
-						break;
-					}
-					
-					//collect all the selected books
-					for(ComboBox<Books> bookBox: chooseBookList)
-						bookList.add(bookBox.getValue());
-					
-					//inserts the new entry with proper parameters
-					((WriteExcel)parser).insertEntry(
-							new Entry(name, ID, bookList, dateList));
-					
-					System.out.println(alert.alert_confirmation_additionalEntry());
+			//if ever error is set, show proper alert and do nothing
+			if(error) alert.alert_error_invalidDateFormat();
+			else{
+				bookList = new ArrayList<Books>();
+
+				//if name is blank, show appropriate error message
+				name = nameField.getText();
+				if(name.compareTo("") <= 0){
+					alert.alert_error_invalidNameFormat();
+					return;
+				}
+
+				//ID must be a number
+				try{
+					ID = Integer.parseInt(IDField.getText());
+				}catch (NumberFormatException ex){
+					alert.alert_error_invalidIDFormat();
+					return;
+				}
+
+				//collect all the selected books
+				for(ComboBox<Books> bookBox: chooseBookList)
+					bookList.add(bookBox.getValue());
+
+				//inserts the new entry with proper parameters
+				((WriteExcel)parser).insertEntry(
+						new Entry(name, ID, bookList, dateList));
+
+				//asks user if an additional entry will be inserted
+				if(alert.alert_confirmation_additionalEntry())
 					scene_insertEntry(stage);
-					//TODO: connect to dialog asking if another entry is to be entered
+				else{
+					scene_viewEntries(stage);
 				}
 			}
+
 		});
 		
 		//back will go back a scene, which happens to be scene_welcome
@@ -344,6 +350,15 @@ public class Start extends Application implements GUI_VARS{
 		});
 		
 		stage.show();
+	}
+	
+	/**
+	 * @function		scene_viewEntries
+	 * @param			stage (Stage) the stage where the entries are displayed
+	 * @description		sets the stage to display all the entries in the file
+	 */
+	private void scene_viewEntries(Stage stage){
+		
 	}
 	
 	
