@@ -29,8 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -125,6 +123,7 @@ public class Start extends Application implements GUI_VARS{
 			}
 		});
 		
+		
 		//scene where grid is displayed
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);
@@ -144,35 +143,27 @@ public class Start extends Application implements GUI_VARS{
 		
 		GridPane grid = new GridPane();
 		configureGrid(grid, Pos.TOP_LEFT);
-		
-		//used if there are multiple ComboBoxes
-		ArrayList<ComboBox<Books>> chooseBookList = 
-				new ArrayList<ComboBox<Books>>();
-		ArrayList<TextField> chooseDateList = new ArrayList<TextField>();
-		
-		Button nextButton = new Button(NEXT),
-				backButton = new Button(BACK),
-				cancelButton = new Button(CANCEL);
 
-		HBox hbtns = new HBox(5);
-		hbtns.setAlignment(Pos.TOP_RIGHT);
-		hbtns.getChildren().addAll(nextButton, backButton, cancelButton);
 		
-		grid.add(hbtns, 2, 0);
+		/**********************************************************************
+		 * The following code creates and positions the labels for this scene.
+		 */
 		
 		Label nameLabel = new Label(NAME_LABEL),
 				IDLabel = new Label(ID_LABEL),
 				bookLabel = new Label(BOOK_LABEL),
-				dateLabel = new Label(DATE_LABEL),
-				plusLabel = new Label(PLUS_LABEL),
-				minusLabel = new Label(MINUS_LABEL);
+				dateLabel = new Label(DATE_LABEL);
 		
 		grid.add(nameLabel, 1, 1);
 		grid.add(IDLabel, 2, 1);
 		grid.add(bookLabel, 1, 4);
 		grid.add(dateLabel, 2, 4);
 		
-		grid.add(plusLabel, 0, 6);
+		
+		/**********************************************************************
+		 * The following code creates and positions the textFields for this
+		 * scene.
+		 */
 		
 		TextField IDField = new TextField(),
 				nameField = new TextField(),
@@ -185,6 +176,18 @@ public class Start extends Application implements GUI_VARS{
 		grid.add(nameField, 1, 2);
 		grid.add(IDField, 2, 2);
 		grid.add(dateField, 2, 5);
+
+		
+		/**********************************************************************
+		 * The following code creates the comboBox(es) that are used to
+		 * determine the books that the entry bought. The ArrayLists are used
+		 * in case the entry buys multiple books.
+		 */		
+		
+		//used if there are multiple ComboBoxes
+		ArrayList<ComboBox<Books>> chooseBookList = 
+				new ArrayList<ComboBox<Books>>();
+		ArrayList<TextField> chooseDateList = new ArrayList<TextField>();
 		
 		//this will always exist, cannot be removed by minusLabel
 		ObservableList<Books> oBookList = 
@@ -198,12 +201,21 @@ public class Start extends Application implements GUI_VARS{
 		chooseBookList.add(chooseBook);
 		chooseDateList.add(dateField);
 		
-		Scene scene = new Scene(grid);
-		stage.setScene(scene);
+		
+		/**********************************************************************
+		 * The following code creates and formats the next/back/cancel buttons
+		 * that will be located at the top-right of every scene.
+		 */
+		
+		Button nextButton = new Button(NEXT),
+				backButton = new Button(BACK),
+				cancelButton = new Button(CANCEL);
 
-		//used to determine number of rows, 0 will be minimum
-		ArrayList<Integer> gridSize = new ArrayList<Integer>();
-		gridSize.add(getRowCount(grid));
+		HBox hbtns = new HBox(5);
+		hbtns.setAlignment(Pos.TOP_RIGHT);
+		hbtns.getChildren().addAll(nextButton, backButton, cancelButton);
+		
+		grid.add(hbtns, 2, 0);
 
 		//setting actions for next/back/cancel buttons
 		//next will collect all entry data and send it to next scene
@@ -295,6 +307,23 @@ public class Start extends Application implements GUI_VARS{
 			scene_welcome(stage);
 		});
 		
+
+		/**********************************************************************
+		 * The following code creates and formats the "+" and "-" labels that
+		 * are used in this scene. This controls the number of books that the
+		 * user can enter. The max number of books is determined by the max
+		 * number of rows that the gridPane may have (specified in GUI_VARS).
+		 */
+		
+		Label plusLabel = new Label(PLUS_LABEL),
+				minusLabel = new Label(MINUS_LABEL);
+		
+		grid.add(plusLabel, 0, 6);
+
+		//used to determine number of rows, 0 will be minimum
+		ArrayList<Integer> gridSize = new ArrayList<Integer>();
+		gridSize.add(getRowCount(grid));
+		
 		//setting actions for the plus and minus labels
 		//plus will add a new row for user to add an additional book to the list
 		plusLabel.setOnMouseClicked(e->{
@@ -355,6 +384,10 @@ public class Start extends Application implements GUI_VARS{
 			stage.sizeToScene();
 		});
 		
+		
+		Scene scene = new Scene(grid);
+		stage.setScene(scene);
+		
 		stage.show();
 	}
 	
@@ -365,11 +398,17 @@ public class Start extends Application implements GUI_VARS{
 	 */
 	@SuppressWarnings("unchecked")
 	private void scene_viewEntries(Stage stage){
-		
 		stage.setTitle(VIEW_ENTRIES_TITLE);
 		
 		GridPane grid = new GridPane();
 		configureGrid(grid, Pos.TOP_CENTER);
+		
+		
+		/**********************************************************************
+		 * The following code creates and formats the table. The size of the
+		 * table is bound to the size of the stage, and will resize itself with
+		 * it. The columns will likewise bind its size to the table.
+		 */
 		
 		TableView<Entry> table = new TableView<Entry>();
 		ObservableList<Entry> entryList = 
@@ -382,24 +421,28 @@ public class Start extends Application implements GUI_VARS{
 				new TableColumn<Entry, String>(NAME);
 		nameCol.setCellValueFactory(
 				new PropertyValueFactory<Entry, String>("name"));
+		nameCol.prefWidthProperty().bind(table.widthProperty().multiply(.2));
 		
 		//creating column for the IDs
 		TableColumn<Entry, Integer> IDCol = 
 				new TableColumn<Entry, Integer>(ID);
 		IDCol.setCellValueFactory(
 				new PropertyValueFactory<Entry, Integer>("ID"));
+		IDCol.prefWidthProperty().bind(table.widthProperty().multiply(.1));
 		
 		//creating column for the books
 		TableColumn<Entry, String> bookCol = 
 				new TableColumn<Entry, String>(BOOKS);
 		bookCol.setCellValueFactory(
 				new PropertyValueFactory<Entry, String>("booksStr"));
+		bookCol.prefWidthProperty().bind(table.widthProperty().multiply(.5));
 		
 		//creating column for the dates
 		TableColumn<Entry, String> dateCol =
 				new TableColumn<Entry, String>(DATES);
 		dateCol.setCellValueFactory(
 				new PropertyValueFactory<Entry, String>("datesStr"));
+		dateCol.prefWidthProperty().bind(table.widthProperty().multiply(.2));
 		
 		table.getColumns().setAll(nameCol, IDCol, bookCol, dateCol);
 
@@ -407,11 +450,13 @@ public class Start extends Application implements GUI_VARS{
 		table.prefWidthProperty().bind(stage.widthProperty().multiply(.8));
 		table.prefHeightProperty().bind(stage.heightProperty().multiply(.8));
 		
-		//default stage size
-		stage.setWidth(500);
-		stage.setHeight(500);
+		//default (and minimum) stage size
+		stage.setMinWidth(500);
+		stage.setMinHeight(500);
 		
 		grid.getChildren().add(table);
+		
+		
 		
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);
