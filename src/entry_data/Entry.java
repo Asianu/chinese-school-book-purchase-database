@@ -8,9 +8,10 @@ package entry_data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Entry{
-	private String name;
+	private String name, booksStr, datesStr;
 	private int ID;
 	private List<Books> books;
 	private List<String> dates;
@@ -21,7 +22,7 @@ public class Entry{
 	 * @param 		ID (int) - family's registered ID
 	 * @param 		books (HashMap<String, String>) - collection of the book(s)
 	 * 					that the family bought mapped to the dates (format:
-	 * 					dd/mm/yyyy) they were bought
+	 * 					mm/dd/yyyy) they were bought
 	 * @description	Constructor for an entry in the database
 	 */
 	public Entry(String name, int ID, List<Books> books, List<String> dates){
@@ -29,6 +30,9 @@ public class Entry{
 		this.ID    = ID;
 		this.books = books;
 		this.dates = dates;
+		
+		booksStr = getBookList_String();
+		datesStr = getDateList_String();
 	}
 	
 	/**
@@ -52,10 +56,12 @@ public class Entry{
 	public Entry(){this("DEF_ENTRY", 0);}
 	
 	/* getter methods */
-	public int 			getID()	  {return ID;   }
-	public String 		getName() {return name; }
-	public List<Books>  getBooks(){return books;}
-	public List<String> getDates(){return dates;}
+	public int 			getID()	    {return ID;   	 }
+	public String 		getName()   {return name; 	 }
+	public List<Books>  getBooks()  {return books;	 }
+	public List<String> getDates()  {return dates;	 }
+	public String 		getBooksStr(){return booksStr;}
+	public String		getDatesStr(){return datesStr;}
 	
 	/* setter methods */
 	public void setBooksAndDates(List<Books> books, List<String> dates){
@@ -73,6 +79,26 @@ public class Entry{
 		if(name.equals(otherEntry.getName()) && ID == otherEntry.getID())
 			return true;
 		return false;
+	}
+	
+	/**
+	 * @function	getBookList_String
+	 * @param		none
+	 * @return		A complete String of the entry's books
+	 */
+	public String getBookList_String(){
+		List<String> bookNames = new ArrayList<String>();
+		for(Books book: books)bookNames.add(book.toString());
+		return bookNames.stream().collect(Collectors.joining("\n"));
+	}
+	
+	/**
+	 * @function	getDateList_String()
+	 * @param		none
+	 * @return		A complete String of the entry's dates
+	 */
+	public String getDateList_String(){
+		return dates.stream().collect(Collectors.joining("\n"));
 	}
 	
 	/**

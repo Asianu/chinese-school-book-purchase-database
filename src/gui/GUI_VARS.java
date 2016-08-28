@@ -10,6 +10,7 @@ package gui;
 public interface GUI_VARS{
 	final String
 	/* variables used throughout all stages */
+	NAME = "Name", ID = "ID", BOOKS = "Books", DATES = "Dates",
 	STAGE_TITLE = "SDCC-NCCS Textbook Database",
 	EXTENSION = "*.xlsx", EXT = "XLSX",
 	NEXT = "Next", CANCEL = "Cancel", BACK = "Back",
@@ -39,7 +40,7 @@ public interface GUI_VARS{
 	/* text fields */
 	NAME_FIELD = "Last Name",
 	ID_FIELD = "####",
-	DATE_FIELD = "DD/MM/YYYY",
+	DATE_FIELD = "MM/DD/YYYY",
 
 	/* system text (for file paths, etc.) */
 	INIT_DIR = "user.home",
@@ -55,14 +56,14 @@ public interface GUI_VARS{
 			"compatible with the program. Please make sure the selected file " +
 			"is intended to be read with this program or, if it is, check to " +
 			"make sure that it has not been corrupted.",
-	INV_DATE_CONTENT = "The format for all dates must be in DD/MM/YYYY " +
-			"format.\n\nFor example, for the date January 1, 2001, the " +
-			"inputted date format would be: 01/01/2001.",
+	INV_DATE_CONTENT = "The format for all dates must be in MM/DD/YYYY " +
+			"format.\n\nFor example, for the date January 2, 2001, the " +
+			"inputted date format would be: 01/02/2001.",
 	INV_ID_CONTENT = "The family's ID must be input as a number",
 	INV_NAME_CONTENT = "The family's name cannot be left empty",
 	CON_ADD_ENTRY_CONTENT = "Would you like to create another entry?";
 
 	final int
 	/* used for ChooseBox de/increments */
-	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 10;
+	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 12;
 }

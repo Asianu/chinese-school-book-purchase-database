@@ -23,9 +23,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -114,7 +119,7 @@ public class Start extends Application implements GUI_VARS{
 				if(((ReadExcel)(parser = 
 						new ReadExcel(workingFile))).isValidFile()){
 					parser = ((ReadExcel)parser).wE;
-					//TODO: go to view stage
+					scene_viewEntries(stage);
 				}
 				else alert.alert_error_invalidFile();
 			}
@@ -193,7 +198,6 @@ public class Start extends Application implements GUI_VARS{
 		chooseBookList.add(chooseBook);
 		chooseDateList.add(dateField);
 		
-		
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);
 
@@ -222,8 +226,8 @@ public class Start extends Application implements GUI_VARS{
 				else{
 					int day = 0, month = 0, year = 0;
 					try{
-						day = Integer.parseInt(date.substring(0,2));
-						month = Integer.parseInt(date.substring(3,5));
+						month = Integer.parseInt(date.substring(0,2));
+						day = Integer.parseInt(date.substring(3,5));
 						year = Integer.parseInt(date.substring(6));
 					}catch(NumberFormatException ex){
 						error = true;
@@ -359,16 +363,60 @@ public class Start extends Application implements GUI_VARS{
 	 * @param			stage (Stage) the stage where the entries are displayed
 	 * @description		sets the stage to display all the entries in the file
 	 */
+	@SuppressWarnings("unchecked")
 	private void scene_viewEntries(Stage stage){
+		
 		stage.setTitle(VIEW_ENTRIES_TITLE);
 		
 		GridPane grid = new GridPane();
-		grid.setAlignment(Pos.TOP_CENTER);
-
+		configureGrid(grid, Pos.TOP_CENTER);
 		
-		ObservableList<Books> oBookList = 
-				FXCollections.observableArrayList(Books.getAllBooks());
-		final ComboBox<Books> chooseBook = new ComboBox<Books>(oBookList);
+		TableView<Entry> table = new TableView<Entry>();
+		ObservableList<Entry> entryList = 
+				FXCollections.observableArrayList(parser.getAllEntries());
+		
+		table.setItems(entryList);
+		
+		//creating column for the names
+		TableColumn<Entry, String> nameCol = 
+				new TableColumn<Entry, String>(NAME);
+		nameCol.setCellValueFactory(
+				new PropertyValueFactory<Entry, String>("name"));
+		
+		//creating column for the IDs
+		TableColumn<Entry, Integer> IDCol = 
+				new TableColumn<Entry, Integer>(ID);
+		IDCol.setCellValueFactory(
+				new PropertyValueFactory<Entry, Integer>("ID"));
+		
+		//creating column for the books
+		TableColumn<Entry, String> bookCol = 
+				new TableColumn<Entry, String>(BOOKS);
+		bookCol.setCellValueFactory(
+				new PropertyValueFactory<Entry, String>("booksStr"));
+		
+		//creating column for the dates
+		TableColumn<Entry, String> dateCol =
+				new TableColumn<Entry, String>(DATES);
+		dateCol.setCellValueFactory(
+				new PropertyValueFactory<Entry, String>("datesStr"));
+		
+		table.getColumns().setAll(nameCol, IDCol, bookCol, dateCol);
+
+		//binding the size of the table to be proportional to the stage's size
+		table.prefWidthProperty().bind(stage.widthProperty().multiply(.8));
+		table.prefHeightProperty().bind(stage.heightProperty().multiply(.8));
+		
+		//default stage size
+		stage.setWidth(500);
+		stage.setHeight(500);
+		
+		grid.getChildren().add(table);
+		
+		Scene scene = new Scene(grid);
+		stage.setScene(scene);
+		
+		stage.show();
 	}
 	
 	
