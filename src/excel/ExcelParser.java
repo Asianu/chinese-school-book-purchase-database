@@ -217,6 +217,28 @@ public class ExcelParser{
 			}
 		return false;
 	}
+	
+	/**
+	 * @function		getAllEntries
+	 * @param			none
+	 * @return			ret (ArrayList<Entry>)
+	 * @description		iterates row by row and collects entries to return
+	 */
+	public ArrayList<Entry> getAllEntries(){
+		ArrayList<Entry> ret = new ArrayList<Entry>();
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		
+		//go through rows and see if not null
+		while(rowIterator.hasNext()){
+			Row currentRow = rowIterator.next();
+			Entry currentEntry = getEntry(currentRow);
+			
+			//adds entry to return if not null (is a valid entry)
+			if(currentEntry != null) ret.add(currentEntry);
+		}
+		
+		return ret;
+	}
 
 	/**
 	 * @function	hasName

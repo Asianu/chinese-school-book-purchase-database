@@ -9,6 +9,7 @@ package entry_data;
 import java.util.ArrayList;
 
 public enum Books{
+	NULL ("(Book not selected)"),
 	TBPM1("Vol. 1 Traditional & Bo-Po-Mo"),
 	TPY1 ("Vol. 1 Traditional & Pin-Yin"),
 	S1   ("Vol. 1 Simplified"),

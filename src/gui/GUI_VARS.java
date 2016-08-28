@@ -18,6 +18,7 @@ public interface GUI_VARS{
 	/* text variables */
 	/* misc. titles */
 	INSERT_ENTRY_TITLE = "Insert an Entry",
+	VIEW_ENTRIES_TITLE = "Search for an Entry",
 
 	/* "floating" text */
 	SELECT_TEXT = "Select an option",

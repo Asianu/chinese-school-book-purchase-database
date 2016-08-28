@@ -269,10 +269,7 @@ public class WriteExcel extends ExcelParser{
 			
 			//if first book, write to the startCell
 			if(i == 0){
-				Books book = books.get(i);
-				startCell.setCellValue(
-						book == null ? DEF_BOOK_NAME : 
-							books.get(i).toString());
+				startCell.setCellValue(books.get(i).toString());
 				
 				//create the corresponding dateCell
 				dateCell = startCell.getRow().createCell

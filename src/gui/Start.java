@@ -185,6 +185,7 @@ public class Start extends Application implements GUI_VARS{
 		ObservableList<Books> oBookList = 
 				FXCollections.observableArrayList(Books.getAllBooks());
 		final ComboBox<Books> chooseBook = new ComboBox<Books>(oBookList);
+		chooseBook.setValue(Books.NULL);
 
 		grid.add(chooseBook, 1, 5);
 		
@@ -297,6 +298,7 @@ public class Start extends Application implements GUI_VARS{
 			if(numRows - 1 < MAX_BOOK_ROW){
 				final ComboBox<Books> tmpChooseBook = 
 						new ComboBox<Books>(oBookList);
+				tmpChooseBook.setValue(Books.NULL);
 				TextField tmpDateField = new TextField();
 				
 				tmpDateField.setPromptText(DATE_FIELD);
@@ -358,7 +360,15 @@ public class Start extends Application implements GUI_VARS{
 	 * @description		sets the stage to display all the entries in the file
 	 */
 	private void scene_viewEntries(Stage stage){
+		stage.setTitle(VIEW_ENTRIES_TITLE);
 		
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.TOP_CENTER);
+
+		
+		ObservableList<Books> oBookList = 
+				FXCollections.observableArrayList(Books.getAllBooks());
+		final ComboBox<Books> chooseBook = new ComboBox<Books>(oBookList);
 	}
 	
 	
