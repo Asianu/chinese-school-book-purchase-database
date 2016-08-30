@@ -454,7 +454,38 @@ public class Start extends Application implements GUI_VARS{
 		stage.setMinWidth(500);
 		stage.setMinHeight(500);
 		
-		grid.getChildren().add(table);
+		grid.add(table, 0, 1, 4, 6);
+		
+		
+		/**********************************************************************
+		 * The following code takes care of the search field existing in this
+		 * scene. As the user types in the person's name, the table will change
+		 * its content accordingly.
+		 */
+		
+		TextField searchField = new TextField();
+		searchField.setPromptText(SEARCH_FIELD);
+		
+		//typing in the searchField will restrict the search results to match
+		//whatever the search query is
+		searchField.textProperty().addListener((observable, oldValue, newValue) ->{
+			String query = searchField.getText().toLowerCase();
+			ArrayList<Entry> tmpEntryList = new ArrayList<Entry>();
+			
+			//goes through and adds only the entries that match the search
+			//query
+			for(Entry entry: parser.getAllEntries()){
+				String name = entry.getName().toLowerCase();
+
+				if(query.length() <= name.length())
+					if(query.equals(name.substring(0, query.length())))
+						tmpEntryList.add(entry);
+			}
+			
+			table.setItems(FXCollections.observableArrayList(tmpEntryList));
+		});
+		
+		grid.add(searchField, 0, 0, 1, 1);
 		
 		
 		

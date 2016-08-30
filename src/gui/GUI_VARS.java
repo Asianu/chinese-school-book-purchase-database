@@ -41,6 +41,7 @@ public interface GUI_VARS{
 	NAME_FIELD = "Last Name",
 	ID_FIELD = "####",
 	DATE_FIELD = "MM/DD/YYYY",
+	SEARCH_FIELD = "Search (by name)",
 
 	/* system text (for file paths, etc.) */
 	INIT_DIR = "user.home",
