@@ -52,6 +52,11 @@ public class Start extends Application implements GUI_VARS{
 	public void start(Stage stage) throws Exception{
 		//configures the stage
 		stage.setTitle(STAGE_TITLE);
+		
+		//default (and minimum) stage size
+		stage.setMinWidth(STAGE_SIZE);
+		stage.setMinHeight(STAGE_SIZE);
+		
 		stage.setOnCloseRequest(e->{
 			if(parser != null) ((WriteExcel)parser).end();
 		});
@@ -203,21 +208,20 @@ public class Start extends Application implements GUI_VARS{
 		
 		
 		/**********************************************************************
-		 * The following code creates and formats the next/back/cancel buttons
-		 * that will be located at the top-right of every scene.
+		 * The following code creates and formats the next/cancel buttons that
+		 * will be located at the top-right of every scene.
 		 */
 		
 		Button nextButton = new Button(NEXT),
-				backButton = new Button(BACK),
 				cancelButton = new Button(CANCEL);
 
 		HBox hbtns = new HBox(5);
 		hbtns.setAlignment(Pos.TOP_RIGHT);
-		hbtns.getChildren().addAll(nextButton, backButton, cancelButton);
+		hbtns.getChildren().addAll(nextButton, cancelButton);
 		
 		grid.add(hbtns, 2, 0);
 
-		//setting actions for next/back/cancel buttons
+		//setting actions for next/cancel buttons
 		//next will collect all entry data and send it to next scene
 		nextButton.setOnAction(e->{
 			//used to determine if any errors were found, if so then do not
@@ -297,14 +301,9 @@ public class Start extends Application implements GUI_VARS{
 
 		});
 		
-		//back will go back a scene, which happens to be scene_welcome
-		backButton.setOnAction(e->{
-			cancelButton.fire();
-		});
-		
-		//cancel will go back to scene_welcome
+		//cancel will go back (or skip to) viewEntreis
 		cancelButton.setOnAction(e->{
-			scene_welcome(stage);
+			scene_viewEntries(stage);
 		});
 		
 
@@ -450,11 +449,7 @@ public class Start extends Application implements GUI_VARS{
 		table.prefWidthProperty().bind(stage.widthProperty().multiply(.8));
 		table.prefHeightProperty().bind(stage.heightProperty().multiply(.8));
 		
-		//default (and minimum) stage size
-		stage.setMinWidth(500);
-		stage.setMinHeight(500);
-		
-		grid.add(table, 0, 1, 4, 6);
+		grid.add(table, 0, 1, 8, 1);
 		
 		
 		/**********************************************************************
@@ -485,9 +480,30 @@ public class Start extends Application implements GUI_VARS{
 			table.setItems(FXCollections.observableArrayList(tmpEntryList));
 		});
 		
-		grid.add(searchField, 0, 0, 1, 1);
+		grid.add(searchField, 0, 0, 3, 1);
 		
 		
+		/**********************************************************************
+		 * The following code formats and places the buttons into the gridPane.
+		 * At this stage, user will be able to insert a new entry, or go back
+		 * to the beginning (scene_welcome).
+		 */
+		
+		Button newButton = new Button(NEW);
+		
+		HBox hbtns = new HBox(5);
+		
+		hbtns.setAlignment(Pos.TOP_RIGHT);
+		hbtns.getChildren().addAll(newButton);
+		
+		//manually adding a buffer between search bar and buttons
+		grid.add(new Label("                              "), 3, 0, 3, 1);
+		grid.add(hbtns, 6, 0, 2, 1);
+		
+		//newButton goes to insertEntry's scene to let user create a new entry
+		newButton.setOnAction(e->{
+			scene_insertEntry(stage);
+		});
 		
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);

@@ -214,6 +214,17 @@ public class WriteExcel extends ExcelParser{
 			fos.close();
 		}catch(IOException e){e.printStackTrace();}
 	}
+	
+	/**
+	 * @function	save
+	 * @param		none
+	 * @description	Saves the workbook to the file without closing it
+	 */
+	public void save(){
+		try{
+			workbook.write(fos);
+		}catch(IOException e){e.printStackTrace();}
+	}
 
 	/**
 	 * @function	WriteColumnLabels

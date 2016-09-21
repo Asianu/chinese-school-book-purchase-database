@@ -13,7 +13,7 @@ public interface GUI_VARS{
 	NAME = "Name", ID = "ID", BOOKS = "Books", DATES = "Dates",
 	STAGE_TITLE = "SDCC-NCCS Textbook Database",
 	EXTENSION = "*.xlsx", EXT = "XLSX",
-	NEXT = "Next", CANCEL = "Cancel", BACK = "Back",
+	NEXT = "Next", CANCEL = "Cancel", NEW = "New", CLOSE = "Close",
 	YES = "Yes", NO = "No",
 
 	/* text variables */
@@ -66,5 +66,5 @@ public interface GUI_VARS{
 
 	final int
 	/* used for ChooseBox de/increments */
-	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 12;
+	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 12, STAGE_SIZE = 500;
 }

@@ -69,7 +69,7 @@ public class Alerts implements GUI_VARS{
 	/**
 	 * @function	alert_confirmation_additionalEntry
 	 * @param		none
-	 * @return 
+	 * @return 		true if "yes" is selected, false if "no" is selected
 	 * @description	opens up a confirmation dialog to determine if the user
 	 * 				would like to input a new entry
 	 */
@@ -89,6 +89,16 @@ public class Alerts implements GUI_VARS{
 		
 		if(result.get() == yesButton) return true;
 		else return false;
+	}
+	
+	/**
+	 * @function	alert_information_bookCount
+	 * @param		
+	 * @description	takes in the list of books, counts them, and displays
+	 * 				information regarding them.
+	 */
+	public void alert_information_bookCount(){
+		//TODO: this
 	}
 
 }
