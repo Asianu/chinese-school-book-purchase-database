@@ -56,6 +56,8 @@ public class Start extends Application implements GUI_VARS{
 		//default (and minimum) stage size
 		stage.setMinWidth(STAGE_SIZE);
 		stage.setMinHeight(STAGE_SIZE);
+		stage.setMaxWidth(STAGE_SIZE);
+		stage.setMaxHeight(STAGE_SIZE);
 		
 		stage.setOnCloseRequest(e->{
 			if(parser != null) ((WriteExcel)parser).end();
@@ -216,10 +218,10 @@ public class Start extends Application implements GUI_VARS{
 				cancelButton = new Button(CANCEL);
 
 		HBox hbtns = new HBox(5);
-		hbtns.setAlignment(Pos.TOP_RIGHT);
+		hbtns.setAlignment(Pos.TOP_LEFT);
 		hbtns.getChildren().addAll(nextButton, cancelButton);
 		
-		grid.add(hbtns, 2, 0);
+		grid.add(hbtns, 1, 0);
 
 		//setting actions for next/cancel buttons
 		//next will collect all entry data and send it to next scene
@@ -352,8 +354,6 @@ public class Start extends Application implements GUI_VARS{
 				
 				chooseBookList.add(tmpChooseBook);
 				chooseDateList.add(tmpDateField);
-				
-				stage.sizeToScene();
 			}
 		});
 		
@@ -379,10 +379,11 @@ public class Start extends Application implements GUI_VARS{
 			//add the "-" label back if minimum #s of rows not reached
 			if(numRows - 3 >= MIN_BOOK_ROW)
 				grid.add(minusLabel, 0, numRows - 3);
-			
-			stage.sizeToScene();
 		});
 		
+		//for some reason the width/height need to be set manually, otherwise
+		//shrinks
+		stage.setWidth(STAGE_SIZE); stage.setHeight(STAGE_SIZE);
 		
 		Scene scene = new Scene(grid);
 		stage.setScene(scene);
@@ -400,7 +401,7 @@ public class Start extends Application implements GUI_VARS{
 		stage.setTitle(VIEW_ENTRIES_TITLE);
 		
 		GridPane grid = new GridPane();
-		configureGrid(grid, Pos.TOP_CENTER);
+		configureGrid(grid, Pos.TOP_LEFT);
 		
 		
 		/**********************************************************************
@@ -446,10 +447,11 @@ public class Start extends Application implements GUI_VARS{
 		table.getColumns().setAll(nameCol, IDCol, bookCol, dateCol);
 
 		//binding the size of the table to be proportional to the stage's size
-		table.prefWidthProperty().bind(stage.widthProperty().multiply(.8));
-		table.prefHeightProperty().bind(stage.heightProperty().multiply(.8));
+		//table.setPrefHeight(stage.heightProperty().multiply(.8));
+		table.setMinWidth(465);
+		table.setMinHeight(400);
 		
-		grid.add(table, 0, 1, 8, 1);
+		grid.add(table, 0, 1, 4, 1);
 		
 		
 		/**********************************************************************
@@ -480,7 +482,7 @@ public class Start extends Application implements GUI_VARS{
 			table.setItems(FXCollections.observableArrayList(tmpEntryList));
 		});
 		
-		grid.add(searchField, 0, 0, 3, 1);
+		grid.add(searchField, 0, 0, 2, 1);
 		
 		
 		/**********************************************************************
@@ -497,8 +499,8 @@ public class Start extends Application implements GUI_VARS{
 		hbtns.getChildren().addAll(newButton);
 		
 		//manually adding a buffer between search bar and buttons
-		grid.add(new Label("                              "), 3, 0, 3, 1);
-		grid.add(hbtns, 6, 0, 2, 1);
+		//grid.add(new Label("                              "), 3, 0, 3, 1);
+		grid.add(hbtns, 2, 0, 2, 1);
 		
 		//newButton goes to insertEntry's scene to let user create a new entry
 		newButton.setOnAction(e->{
@@ -523,7 +525,7 @@ public class Start extends Application implements GUI_VARS{
 		grid.setAlignment(position);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		grid.setPadding(new Insets(25, 25, 25, 25));
+		grid.setPadding(new Insets(10));
 	}
 	
 	/**

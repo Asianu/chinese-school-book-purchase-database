@@ -66,5 +66,5 @@ public interface GUI_VARS{
 
 	final int
 	/* used for ChooseBox de/increments */
-	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 12, STAGE_SIZE = 500;
+	MIN_BOOK_ROW = 6, MAX_BOOK_ROW = 15, STAGE_SIZE = 500;
 }
