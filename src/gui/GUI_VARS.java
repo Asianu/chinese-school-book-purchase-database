@@ -23,10 +23,12 @@ public interface GUI_VARS{
 
 	/* "floating" text */
 	SELECT_TEXT = "Select an option",
+	TOTAL = "Total: ",
 
 	/* buttons */
 	NEW_FILE_B = "Create new file...",
 	OLD_FILE_B = "Select existing file...",
+	STATS_B = "Stats",
 
 	/* labels */
 	NAME_LABEL = "Name: ",
@@ -52,6 +54,7 @@ public interface GUI_VARS{
 	INV_ID_HEADER = "ERROR: ID is invalid",
 	INV_NAME_HEADER = "ERROR: Name is invalid",
 	CON_ADD_ENTRY_HEADER = "Enter another Entry",
+	INFO_BOOK_COUNT_HEADER = "Book Purchase History Statsitics",
 
 	INV_FILE_CONTENT = "The file you are trying to open is not " + 
 			"compatible with the program. Please make sure the selected file " +
@@ -62,7 +65,8 @@ public interface GUI_VARS{
 			"inputted date format would be: 01/02/2001.",
 	INV_ID_CONTENT = "The family's ID must be input as a number",
 	INV_NAME_CONTENT = "The family's name cannot be left empty",
-	CON_ADD_ENTRY_CONTENT = "Would you like to create another entry?";
+	CON_ADD_ENTRY_CONTENT = "Would you like to create another entry?",
+	INFO_BOOK_COUNT_CONTENT = "No books in purchase history.";
 
 	final int
 	/* used for ChooseBox de/increments */

@@ -411,8 +411,9 @@ public class Start extends Application implements GUI_VARS{
 		 */
 		
 		TableView<Entry> table = new TableView<Entry>();
+		ArrayList<Entry> entries = parser.getAllEntries();
 		ObservableList<Entry> entryList = 
-				FXCollections.observableArrayList(parser.getAllEntries());
+				FXCollections.observableArrayList(entries);
 		
 		table.setItems(entryList);
 		
@@ -491,12 +492,13 @@ public class Start extends Application implements GUI_VARS{
 		 * to the beginning (scene_welcome).
 		 */
 		
-		Button newButton = new Button(NEW);
+		Button newButton = new Button(NEW),
+				statsButton = new Button(STATS_B);
 		
 		HBox hbtns = new HBox(5);
 		
-		hbtns.setAlignment(Pos.TOP_RIGHT);
-		hbtns.getChildren().addAll(newButton);
+		hbtns.setAlignment(Pos.TOP_LEFT);
+		hbtns.getChildren().addAll(newButton, statsButton);
 		
 		//manually adding a buffer between search bar and buttons
 		//grid.add(new Label("                              "), 3, 0, 3, 1);
@@ -505,6 +507,11 @@ public class Start extends Application implements GUI_VARS{
 		//newButton goes to insertEntry's scene to let user create a new entry
 		newButton.setOnAction(e->{
 			scene_insertEntry(stage);
+		});
+		
+		//statsButton calls the bookCount alert to display statistics to user
+		statsButton.setOnAction(e->{
+			alert.alert_information_bookCount(entries);
 		});
 		
 		Scene scene = new Scene(grid);

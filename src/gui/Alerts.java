@@ -6,8 +6,15 @@
 
 package gui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 
+import entry_data.Books;
+import entry_data.Entry;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -93,12 +100,57 @@ public class Alerts implements GUI_VARS{
 	
 	/**
 	 * @function	alert_information_bookCount
-	 * @param		
-	 * @description	takes in the list of books, counts them, and displays
+	 * @param		takes in a list of entries.
+	 * @description	takes in the list of entries, counts books, and displays
 	 * 				information regarding them.
 	 */
-	public void alert_information_bookCount(){
-		//TODO: this
+	public void alert_information_bookCount(ArrayList<Entry> entries){
+		Alert bookCountAlert = new Alert(Alert.AlertType.INFORMATION);
+		bookCountAlert.setTitle(STAGE_TITLE);
+		bookCountAlert.setHeaderText(INFO_BOOK_COUNT_HEADER);
+		
+		//treeMap will keep track of the books and their counts
+		//Books will be the key, and Integer (count) will be the value
+		TreeMap<Books, Integer> bookCount = new TreeMap<Books, Integer>();
+		
+		//loops through existing entries
+		for(Entry entry: entries){
+			List<Books> bookList = entry.getBooks();
+			
+			//loops through the bookList of each entry
+			for(Books book: bookList){
+				
+				//increments count of existing books
+				if(bookCount.containsKey(book))
+					bookCount.put(book, bookCount.get(book) + 1);
+				
+				//otherwise put the book in
+				else
+					bookCount.put(book, 1);
+			}
+		}
+
+		//begin building the string to display in the alert
+		String stats = "";
+		int total = 0;
+
+		Set<Books> keys = bookCount.keySet();
+		Iterator<Books> keysIter = keys.iterator();
+		
+		while(keysIter.hasNext()){
+			Books book = keysIter.next();
+			if(book.equals(Books.NULL)) continue;
+			
+			stats += book.toString() + ": " + bookCount.get(book) + "\n";
+			total += bookCount.get(book);
+		}
+		
+		stats += "\n" + TOTAL + total;
+		
+		if(total == 0) stats = INFO_BOOK_COUNT_CONTENT;
+		
+		bookCountAlert.setContentText(stats);
+		bookCountAlert.show();
 	}
 
 }
